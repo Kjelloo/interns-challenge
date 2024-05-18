@@ -17,20 +17,6 @@ import {Holiday} from "./Models/Holidays";
 import {Month} from "./Models/Month";
 import {Week} from "./Models/Week";
 
-// const holidays: Holiday[] = [
-//     { date: '2024-01-01', name: 'New Year\'s Day' },
-//     { date: '2024-03-28', name: 'Maundy Thursday' },
-//     { date: '2024-03-29', name: 'Good Friday' },
-//     { date: '2024-03-31', name: 'Easter Sunday' },
-//     { date: '2024-04-01', name: 'Easter Monday' },
-//     { date: '2024-05-09', name: 'Ascension Day' },
-//     { date: '2024-05-19', name: 'Whit Sunday' },
-//     { date: '2024-05-20', name: 'Whit Monday' },
-//     { date: '2024-06-05', name: 'Constitution Day' },
-// ];
-
-
-
 interface CalendarProps {
     startMonth: Date;
     endMonth: Date;

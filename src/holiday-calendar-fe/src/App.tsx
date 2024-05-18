@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import Calendar from './Calendar';
-import {addMonths, subMonths} from "date-fns";
+import {addMonths, endOfMonth, startOfYear} from "date-fns";
 import './App.css';
 import {Holiday} from "./Models/Holidays";
 import axios from "axios";
 
 const App: React.FC = () => {
-  const [startMonth, setStartMonth] = useState(new Date());
-  const [endMonth, setEndMonth] = useState(addMonths(new Date(), 2));
-  const [holidays, setHolidays] = useState<Holiday[]>([]);
+  const monthsShown = 5;
 
+  const [startMonth, setStartMonth] = useState(startOfYear(new Date()));
+  const [endMonth, setEndMonth] = useState(endOfMonth(addMonths(startMonth, monthsShown)));
+  const [holidays, setHolidays] = useState<Holiday[]>([]);
 
   useEffect(() => {
     axios.get(`http://localhost:3001/api/holidays`, {
@@ -17,12 +18,11 @@ const App: React.FC = () => {
           startDate: startMonth,
           endDate: endMonth,
       },
-      headers: {
-        Authorization: 'Bearer e77248cf-e5d9-474e-a122-a4b1e4754f23',
-      },
     })
         .then((response) => {
-          setHolidays(response.data);
+          let holidays = response.data.filter((holiday: Holiday) => holiday.nationalHoliday);
+
+          setHolidays(holidays);
         })
         .catch((error) => {
           console.error('Error fetching holidays', error);
@@ -33,12 +33,12 @@ const App: React.FC = () => {
   const handleBack = () => {
     setStartMonth(prevStart => {
       const newStart = new Date(prevStart);
-      newStart.setMonth(newStart.getMonth() - 3);
+      newStart.setMonth(newStart.getMonth() - monthsShown);
       return newStart;
     });
     setEndMonth(prevEnd => {
       const newEnd = new Date(prevEnd);
-      newEnd.setMonth(newEnd.getMonth() - 3);
+      newEnd.setMonth(newEnd.getMonth() - monthsShown);
       return newEnd;
     });
   };
@@ -46,12 +46,12 @@ const App: React.FC = () => {
   const handleForward = () => {
     setStartMonth(prevStart => {
       const newStart = new Date(prevStart);
-      newStart.setMonth(newStart.getMonth() + 3);
+      newStart.setMonth(newStart.getMonth() + monthsShown);
       return newStart;
     });
     setEndMonth(prevEnd => {
       const newEnd = new Date(prevEnd);
-      newEnd.setMonth(newEnd.getMonth() + 3);
+      newEnd.setMonth(newEnd.getMonth() + monthsShown);
       return newEnd;
     });
   };
@@ -59,9 +59,9 @@ const App: React.FC = () => {
   return (
       <div className="App">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px' }}>
-          <button onClick={handleBack}>Previous 3 Months</button>
+          <button onClick={handleBack}>Previous months</button>
           <h1>Holiday Calendar</h1>
-          <button onClick={handleForward}>Next 3 Months</button>
+          <button onClick={handleForward}>Next months</button>
         </div>
         <Calendar startMonth={startMonth} endMonth={endMonth} holidays={holidays} />
       </div>
