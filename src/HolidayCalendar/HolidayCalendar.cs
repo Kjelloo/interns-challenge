@@ -7,7 +7,7 @@ public class HolidayCalendar : IHolidayCalendar
   private RestClient _client;
   public HolidayCalendar()
   {
-    _client = new RestClient("https://api.sallinggrou.com/v1/holidays/",
+    _client = new RestClient("https://api.sallinggroup.com/v1/holidays/",
       configureSerialization: s => s.UseNewtonsoftJson());
 
     // todo: fetch token from secure storage
